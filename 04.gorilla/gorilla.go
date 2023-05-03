@@ -2,22 +2,22 @@ package main
 
 import (
 	"fmt"
-	"github.com/gorilla/mux"
 	"net/http"
+	
+	"github.com/gorilla/mux"
 )
 
 func main(){
-	r := mux.NewRouter()
+	router := mux.NewRouter()
 
-	r.HandleFunc("/index", indexHandler)
-	r.HandleFunc("/books/{title}/page/{page}", bookPageHandler)
+	router.HandleFunc("/", indexHandler)
+	router.HandleFunc("/books/{title}/page/{page}", bookPageHandler)
 	println("the server is running on port 8080")
-	http.ListenAndServe(":8000", nil)
+	http.ListenAndServe(":8080", router)
 }
 
 
 func indexHandler(w http.ResponseWriter, r *http.Request){
-	println("we are her")
 	fmt.Fprintf(w,"Hey there gorilla package is working")
 }
 
@@ -25,7 +25,7 @@ func bookPageHandler(w http.ResponseWriter, r *http.Request){
 	vars := mux.Vars(r)
 
 	title := vars["title"]
-	page := vars["page"]
+	page :=  vars["page"]
 
-	fmt.Fprintf(w, "You are requesting a book: %s\n, page number %d\n", title, page)
+	fmt.Fprintf(w, "You are requesting a book: %s, page number %s\n", title, page)
 }
