@@ -39,3 +39,39 @@ func getPageHandler(w http.ResponseWriter, r *http.Request){
 we would need to extract this url parameters and to do that we are going to use the `vars := mux.vars[r]`
 
 it takes http.request as a parameter and returns a map of the segments.
+
+
+just to mention, at http.ListenAndServe() we were passing a parameter nil, for this we are going to pass the name of our router mux that is index: `http.ListenAndServe(":8080", index)`
+
+## features of gorilla/mux Router
+
+### methods
+
+restrict the request handler to specific HTTP methods.
+
+we can look routes/paths for specifiv methods i.e `router.HandleFunc("/books/add/", addBookHandler).Methods("POST")`
+
+you can lock it for POST, GET, PUT, DELETE methods
+
+### hostnames & Subdomains
+
+we can also restrict handlers to specific hostnames and subdomains. i.e
+
+`router.HandleFunc("/books/update", updateBookHandler).Host("www.mybookstore.com")
+
+### schemes
+
+restricts the handlers to specific i.e http/https
+
+`router.HandleFunc("/books/add", addBookHandler).Schemes("http")` or `.Schemes("https")`
+
+### path prefixes and sub routers
+
+Restrict the request handler to specific path prefixes.
+
+```go
+bookrouter := r.PathPrefix("/books").Subrouter()
+bookrouter.HandleFunc("/", AllBooks)
+bookrouter.HandleFunc("/{title}", GetBook)
+```
+
